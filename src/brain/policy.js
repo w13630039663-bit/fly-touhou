@@ -33,7 +33,7 @@ export class ReadoutPolicy {
       : { exc: 1, inh: 1 };
   }
 
-  async loadCheckpoint(url = '/public/data/checkpoint.json') {
+  async loadCheckpoint(url = './public/data/checkpoint.json') {
     try {
       const res = await fetch(url);
       if (res.ok) {

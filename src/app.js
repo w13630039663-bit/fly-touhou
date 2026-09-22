@@ -77,27 +77,27 @@ function bootstrap() {
   // v600a = 加性两段归一化修复版 (PLAN_520 A 冠军)；v600b = v1 读出恢复版 (C 冠军)。
   const DATASETS = {
     v1: {
-      graph: '/public/data/connectome/graph.json',
-      manifest: '/public/data/connectome/manifest.json',
-      checkpoint: '/public/data/checkpoint.json',
+      graph: './public/data/connectome/graph.json',
+      manifest: './public/data/connectome/manifest.json',
+      checkpoint: './public/data/checkpoint.json',
       label: 'MaleCNS-80'
     },
     v600: {
-      graph: '/public/data/connectome/graph600.json',
-      manifest: '/public/data/connectome/manifest600.json',
-      checkpoint: '/public/data/checkpoint600.json',
+      graph: './public/data/connectome/graph600.json',
+      manifest: './public/data/connectome/manifest600.json',
+      checkpoint: './public/data/checkpoint600.json',
       label: 'MaleCNS-600'
     },
     v600a: {
-      graph: '/public/data/connectome/graph600a.json',
-      manifest: '/public/data/connectome/manifest600a.json',
-      checkpoint: '/public/data/checkpoint600a.json',
+      graph: './public/data/connectome/graph600a.json',
+      manifest: './public/data/connectome/manifest600a.json',
+      checkpoint: './public/data/checkpoint600a.json',
       label: 'MaleCNS-600a'
     },
     v600b: {
-      graph: '/public/data/connectome/graph600b.json',
-      manifest: '/public/data/connectome/manifest600b.json',
-      checkpoint: '/public/data/checkpoint600b.json',
+      graph: './public/data/connectome/graph600b.json',
+      manifest: './public/data/connectome/manifest600b.json',
+      checkpoint: './public/data/checkpoint600b.json',
       label: 'MaleCNS-600b'
     }
   };

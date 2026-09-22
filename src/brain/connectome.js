@@ -51,7 +51,7 @@ export class MaleCNSConnectome {
     }
   }
 
-  async loadFromUrl(url = '/public/data/connectome/graph.json') {
+  async loadFromUrl(url = './public/data/connectome/graph.json') {
     const res = await fetch(url);
     const data = await res.json();
     this.initGraph(data);

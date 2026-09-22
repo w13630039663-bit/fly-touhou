@@ -52,22 +52,22 @@ export class DanmakuGame {
     // 预载游戏图像资源 (琪露诺BOSS / 冰晶弹 / 发射光核)
     if (typeof Image !== 'undefined') {
       this.bossImage = new Image();
-      this.bossImage.src = '/public/images/boss_emitter.png';
+      this.bossImage.src = './public/images/boss_emitter.png';
       this.bossImageLoaded = false;
       this.bossImage.onload = () => { this.bossImageLoaded = true; };
 
       this.cirnoImage = new Image();
-      this.cirnoImage.src = '/public/images/cirno_boss.png';
+      this.cirnoImage.src = './public/images/cirno_boss.png';
       this.cirnoImageLoaded = false;
       this.cirnoImage.onload = () => { this.cirnoImageLoaded = true; };
 
       this.etamaImage = new Image();
-      this.etamaImage.src = '/public/images/etama3.png';
+      this.etamaImage.src = './public/images/etama3.png';
       this.etamaImageLoaded = false;
       this.etamaImage.onload = () => { this.etamaImageLoaded = true; };
 
       this.remiliaImage = new Image();
-      this.remiliaImage.src = '/public/images/remilia_boss.png';
+      this.remiliaImage.src = './public/images/remilia_boss.png';
       this.remiliaImageLoaded = false;
       this.remiliaImage.onload = () => { this.remiliaImageLoaded = true; };
     }
@@ -188,13 +188,13 @@ export class DanmakuGame {
   initAudio() {
     this.soundBuffers = {};
     this.soundFiles = {
-      tan00: '/public/audio/tan00.wav',
-      kira00: '/public/audio/kira00.wav',
-      enep00: '/public/audio/enep00.wav',
-      graze: '/public/audio/graze.wav',
-      pldead00: '/public/audio/pldead00.wav',
-      damage00: '/public/audio/damage00.wav',
-      cat00: '/public/audio/cat00.wav'
+      tan00: './public/audio/tan00.wav',
+      kira00: './public/audio/kira00.wav',
+      enep00: './public/audio/enep00.wav',
+      graze: './public/audio/graze.wav',
+      pldead00: './public/audio/pldead00.wav',
+      damage00: './public/audio/damage00.wav',
+      cat00: './public/audio/cat00.wav'
     };
     try {
       if (typeof window !== 'undefined') {
