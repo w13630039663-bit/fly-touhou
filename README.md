@@ -225,7 +225,9 @@ docs/
 
 写在这里是为了不让人踩坑，也是为了不让人被数字骗到：
 
-1. **`checkpoint600a.json` 里的 `topologyAdvantagePercent: 17.96 / p: 0.0403 / significant: true` 是无效数据，禁止引用。** 同文件的 `controlIntegrity` 字段自己标注了 `INVALID`：修复前的一处 `--workers` bug 让对照候选在生物图上打分。**全项目唯一有效的拓扑对照是 `checkpoint600ag.json`**（1397.8 vs 1386.3，p=0.9351 ⇒ 零优势）。
+1. **`checkpoint600a.json` / `checkpoint600b.json` 曾带着无效的拓扑主张**（600a：`topologyAdvantagePercent: 17.96 / p: 0.0403 / significant: true`；600b 更夸张：`58.1% / p: 0.0004 / significant: true`）。两者都由修复前的 `train.js` 产出 —— `--workers` 模式下对照候选**在生物图上评分**，铁证是同文件里 `controlWeights[0]` 与 `weights` 逐位相同。**这些字段已用 `tools/strip_invalid_claims.mjs` 从数据文件移除**，页面对照行改为显示 `—`，不再向访客展示无依据的数字。
+   **全项目唯一有效的拓扑对照是 `checkpoint600ag.json`**：bio 1386.3f vs ctrl 1397.8f，Δ = −11.5f，**p = 0.9351 ⇒ 生物拓扑零优势**。
+   ⚠️ 诚实提示：无效数字仍存在于本仓库的 **git 历史**（首个基线提交）里，只是不再被页面加载、也不再作为当前结论。
 2. **训练适应度截断在 1200 帧，测试用 1800 帧。** 训练分不清"活 1200"和"活 1800"。做小收益改动前应把它提到 1800。
 3. **历史 run 不可精确复现**（`cemSeed` 引入前的产物）。新 run 已播种，默认 `20260916`。
 4. **单次 CEM 训练本身就是一个有噪声的样本**（见上节 63.3 帧极差）。

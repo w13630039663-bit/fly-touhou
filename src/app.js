@@ -147,6 +147,10 @@ function bootstrap() {
       const multi = mcList.length > 1 ? ` (×${mcList.length} 均值)` : '';
       setEl('tblControlSec', `${meanSec.toFixed(2)}s${multi}`);
       setEl('tblControlFrames', `${Math.round(meanFrames)} frames${multi}`);
+    } else {
+      // 本数据集没有可信对照时必须显式置空 —— 否则会留着上一个数据集的脏值
+      setEl('tblControlSec', '—');
+      setEl('tblControlFrames', '—');
     }
     if (bm.circuitSilenced) {
       setEl('tblSilencedSec', `${bm.circuitSilenced.seconds.toFixed(2)}s`);
