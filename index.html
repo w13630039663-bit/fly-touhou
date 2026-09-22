@@ -896,11 +896,11 @@
           <button id="btnSpeed5x">5x</button>
           <button id="btnSpeed20x">20x</button>
         </div>
-        <span style="color: var(--muted); margin-left: 10px;" data-i18n="toolbar.plasticity">可塑性:</span>
-        <div class="btn-group" title="P4-1 Hebbian 突触可塑性 // W 是否每帧自更新 (生物局部规则，非优化器)">
-          <button id="btnPlasticityOff" class="active">OFF</button>
-          <button id="btnPlasticityLow">η=1e-5</button>
-          <button id="btnPlasticityMid">η=1e-4</button>
+        <span style="color: var(--muted); margin-left: 10px;" data-i18n="toolbar.plasticity">让突触自己变:</span>
+        <div class="btn-group" data-i18n-title="toolbar.plasticity_title">
+          <button id="btnPlasticityOff" class="active" data-i18n="toolbar.plasticity_off">不变（默认）</button>
+          <button id="btnPlasticityLow" data-i18n="toolbar.plasticity_low">变得慢</button>
+          <button id="btnPlasticityMid" data-i18n="toolbar.plasticity_mid">变得快</button>
         </div>
         <span id="labelPlasticityDrift" style="color: #a78bfa; display: none;"></span>
       </div>
@@ -949,11 +949,11 @@
         <h2>
           <span data-i18n="panel.net_title">CONNECTOME // MALECNS V1.0 GRAPH</span>
           <small id="netSub">80 NODES / 1,296 SYNAPSES</small>
-          <select id="brainDataset" style="margin-left: auto; background: #131620; color: #9ca3af; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font: 10px 'JetBrains Mono', monospace; padding: 2px 6px;" title="MaleCNS 拓扑数据集 (规模对照组)">
-            <option value="v1">80 CELLS · v1</option>
-            <option value="v600">600 CELLS · v2 closure</option>
-            <option value="v600a">600a · additive-norm fix</option>
-            <option value="v600b">600b · v1-readout restore</option>
+          <select id="brainDataset" style="margin-left: auto; background: #131620; color: #9ca3af; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font: 10px 'JetBrains Mono', monospace; padding: 2px 6px;" data-i18n-title="panel.dataset_title">
+            <option value="v1" data-i18n="panel.ds_v1">80 神经元 · 原版 · 存活 25.7s</option>
+            <option value="v600" data-i18n="panel.ds_v600">600 神经元 · 首次扩脑 · 20.6s（被稀释拖坏）</option>
+            <option value="v600a" data-i18n="panel.ds_v600a">600 神经元 · 修好稀释 · 25.6s 🏆 最强</option>
+            <option value="v600b" data-i18n="panel.ds_v600b">600 神经元 · 换回原版读出 · 22.9s</option>
           </select>
         </h2>
         <div class="panel-content">

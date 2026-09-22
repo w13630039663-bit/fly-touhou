@@ -37,8 +37,11 @@ export const translations = {
       radar_off: '👁️ 复眼雷达: 关闭',
       respawn_on: '♾️ 无缝观察: 开启',
       respawn_off: '♾️ 无缝观察: 关闭',
-      plasticity: '可塑性:',
-      plasticity_title: 'P4-1 Hebbian 突触可塑性开关 (W 是否每帧自更新)',
+      plasticity: '让突触自己变:',
+      plasticity_title: '真实大脑的突触会按"一起放电就彼此变强"每帧自我调整。打开后这颗脑的接线强度就不再是出厂值，而是当场漂移。实测：它确实改变了系统行为，但没有可复现的能力提升 —— 换一颗训练随机种子，"变好 82 帧"就翻成"变差 17 帧"。所以这是个科普演示，不是让它变强的开关。',
+      plasticity_off: '不变（默认）',
+      plasticity_low: '变得慢',
+      plasticity_mid: '变得快',
       reset: '🔄 重置战场'
     },
     panel: {
@@ -58,13 +61,23 @@ export const translations = {
       diff_hard: '困难',
       diff_lunatic: '疯狂',
 
-      net_title: '02 // MALECNS V1.0 连接组网络',
+      net_title: '02 // 果蝇脑连接组',
       net_sub: '{n} 节点 / {e} 条突触',
       net_active: '● 连接组神经元放电中',
       net_silenced: '○ 消融静音中 (活动全归零)',
       net_reservoir: '动力学储备池 // 每帧3步迭代',
-      net_plasticity_off: '可塑性 // 关闭 (W 冻结)',
-      net_plasticity_on: '可塑性 // W 相对漂移',
+      net_plasticity_off: '突触 // 固定不变',
+      net_plasticity_on: '突触已改变',
+
+      dataset_title: '换一颗脑试试：四个规模/接法不同的真实连接组 + 各自训练出的读出层。括号里是它在 20 个独立测试场景下的平均存活时间。',
+      ds_v1: '80 神经元 · 原版 · 存活 25.7s',
+      ds_v600: '600 神经元 · 首次扩脑 · 20.6s（被稀释拖坏）',
+      ds_v600a: '600 神经元 · 修好稀释 · 25.6s 🏆 最强',
+      ds_v600b: '600 神经元 · 换回原版读出 · 22.9s',
+      brain_80: '原版脑',
+      brain_600: '扩脑版（被稀释）',
+      brain_600a: '冠军脑',
+      brain_600b: '原版读出脑',
 
       rig_title: '03 // 果蝇具身踏键拟真装置',
       rig_sub: '果蝇实时按键输出 · 60Hz 具身动作',
@@ -165,7 +178,7 @@ export const translations = {
       spec_benchmark_val: '{bt}s (Trained) vs {st}s (Silenced)'
     },
     toolbar: {
-      status_active: 'MaleCNS 60Hz Active',
+      status_active: '{n} neurons · 60Hz active',
       status_silenced: 'MaleCNS Ablated Silenced',
       warp: 'WARP:',
       controller: 'CONTROLLER:',
@@ -177,8 +190,11 @@ export const translations = {
       radar_off: '👁️ Radar: OFF',
       respawn_on: '♾️ Respawn: ON',
       respawn_off: '♾️ Respawn: OFF',
-      plasticity: 'PLASTICITY:',
-      plasticity_title: 'P4-1 Hebbian synaptic plasticity toggle (whether W self-updates per frame)',
+      plasticity: 'SELF-CHANGING SYNAPSES:',
+      plasticity_title: 'Real brains tweak their own synapses ("fire together, wire together") every frame. Turning this on means the wiring strengths stop being the original biological values and drift live. Measured: it really does change the system, but gives no reproducible skill gain — with a different training seed, "+82 frames" flips to "−17 frames". It is a biology demo, not a performance switch.',
+      plasticity_off: 'Frozen (default)',
+      plasticity_low: 'Drift slowly',
+      plasticity_mid: 'Drift fast',
       reset: '🔄 Reset'
     },
     panel: {
@@ -198,13 +214,23 @@ export const translations = {
       diff_hard: 'Hard',
       diff_lunatic: 'Lunatic',
 
-      net_title: '02 // MALECNS V1.0 GRAPH',
+      net_title: '02 // FLY BRAIN CONNECTOME',
       net_sub: '{n} NODES / {e} SYNAPSES',
       net_active: '● CONNECTOME ACTIVE',
       net_silenced: '○ SILENCED ABLATION',
       net_reservoir: 'RESERVOIR // 3 SUBSTEPS PER FRAME',
-      net_plasticity_off: 'PLASTICITY // OFF (W FROZEN)',
-      net_plasticity_on: 'PLASTICITY // REL. W DRIFT',
+      net_plasticity_off: 'SYNAPSES // FROZEN',
+      net_plasticity_on: 'SYNAPSES CHANGED',
+
+      dataset_title: 'Try a different brain: four real connectomes of different size/wiring, each with its own trained readout. The number in brackets is its average survival over 20 independent test scenarios.',
+      ds_v1: '80 neurons · original · survives 25.7s',
+      ds_v600: '600 neurons · first upsizing · 20.6s (dilution hurt it)',
+      ds_v600a: '600 neurons · dilution fixed · 25.6s 🏆 best',
+      ds_v600b: '600 neurons · original readout · 22.9s',
+      brain_80: 'Original brain',
+      brain_600: 'Upsized (diluted)',
+      brain_600a: 'Champion brain',
+      brain_600b: 'Original-readout brain',
 
       rig_title: '03 // MOTOR KEYBOARD RIG',
       rig_sub: 'Fruit Fly Keypress Output · 60Hz Embodiment',
@@ -333,13 +359,19 @@ export function applyLanguage(lang) {
     }
   });
 
-  // 2. 更新语言切换按钮状态
+  // 2. 悬浮提示（title）也随语言切换 —— 原先写死中文，英文界面下会漏出中文
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const text = t(el.getAttribute('data-i18n-title'), lang);
+    if (text) el.setAttribute('title', text);
+  });
+
+  // 3. 更新语言切换按钮状态
   const btnZh = document.getElementById('btnLangZh');
   const btnEn = document.getElementById('btnLangEn');
   if (btnZh) btnZh.classList.toggle('active', lang === 'zh');
   if (btnEn) btnEn.classList.toggle('active', lang === 'en');
 
-  // 3. 广播语言变更事件
+  // 4. 广播语言变更事件
   window.dispatchEvent(new CustomEvent('languageChange', { detail: { lang } }));
 }
 

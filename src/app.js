@@ -75,30 +75,31 @@ function bootstrap() {
   // 后台无阻塞载入真实 MaleCNS 数据与训练好的 Checkpoint
   // 数据集开关：v1 = 80 细胞原通路；v600 = 600 细胞闭包 (规模对照, 稀释受害版)；
   // v600a = 加性两段归一化修复版 (PLAN_520 A 冠军)；v600b = v1 读出恢复版 (C 冠军)。
+  // label 用 getter 而非字符串：界面语言随时可切，名称必须跟着变。
   const DATASETS = {
     v1: {
       graph: './public/data/connectome/graph.json',
       manifest: './public/data/connectome/manifest.json',
       checkpoint: './public/data/checkpoint.json',
-      label: 'MaleCNS-80'
+      get label() { return t('panel.brain_80'); }
     },
     v600: {
       graph: './public/data/connectome/graph600.json',
       manifest: './public/data/connectome/manifest600.json',
       checkpoint: './public/data/checkpoint600.json',
-      label: 'MaleCNS-600'
+      get label() { return t('panel.brain_600'); }
     },
     v600a: {
       graph: './public/data/connectome/graph600a.json',
       manifest: './public/data/connectome/manifest600a.json',
       checkpoint: './public/data/checkpoint600a.json',
-      label: 'MaleCNS-600a'
+      get label() { return t('panel.brain_600a'); }
     },
     v600b: {
       graph: './public/data/connectome/graph600b.json',
       manifest: './public/data/connectome/manifest600b.json',
       checkpoint: './public/data/checkpoint600b.json',
-      label: 'MaleCNS-600b'
+      get label() { return t('panel.brain_600b'); }
     }
   };
   let currentDataset = (() => {
