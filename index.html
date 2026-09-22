@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fly Touhou · A connectome evasion experiment</title>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0F111A;
+      --card-bg: #181B26;
+      --card-bg-subtle: #131620;
+      --card-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05), 0 4px 18px -2px rgba(0, 0, 0, 0.35);
+      --card-shadow-sm: inset 0 1px 0 0 rgba(255, 255, 255, 0.04), 0 2px 10px rgba(0, 0, 0, 0.25);
+      --radius-card: 12px;
+      --radius-btn: 7px;
+      --surface: #181B26;
+      --surface-2: #131620;
+      --ink: #e2e8f0;
+      --muted: #8b95a5;
+      --line: transparent;
+      --border-subtle: rgba(255, 255, 255, 0.04);
+      --accent: #4ade80;
+      --accent-dim: rgba(74, 222, 128, 0.14);
+      --link: #93c5fd;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --gutter: clamp(16px, 2.5vw, 40px);
+      --measure: 1600px;
+      --panel-head: 42px;
+      --panel-foot: 40px;
+      --text-caption: 11px;
+      --text-label: 12px;
+      --text-body: 13.5px;
+      --text-section: 18px;
+      --text-title: 26px;
+      --space-panel-padding: 24px;
+      --space-section-gap: 32px;
+
+      font-family: var(--font-ui);
+      font-size: var(--text-body);
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 60px;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    /* 容器布局宽距 */
+    main, footer, .header-inner {
+      width: min(var(--measure), 100% - var(--gutter) * 2);
+      margin-inline: auto;
+    }
+
+    /* 顶部导航栏 (Sticky Masthead) */
+    .masthead {
+      z-index: 20;
+      background: rgba(15, 17, 26, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+    }
+
+    .header-inner {
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      height: 52px;
+      display: flex;
+    }
+
+    .brand {
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .brand span {
+      color: var(--accent);
+      margin-right: 6px;
+      font-weight: 400;
+    }
+
+    nav {
+      align-items: center;
+      gap: 24px;
+      display: flex;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-size: var(--text-label);
+      font-family: var(--mono);
+      text-decoration: none;
+      transition: color 120ms ease;
+    }
+
+    nav a:hover {
+      color: var(--ink);
+    }
+
+    /* Hero 头部科研介绍 */
+    .hero {
+      justify-content: space-between;
+      align-items: center;
+      gap: 36px;
+      padding: 28px 0 18px;
+      display: flex;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+      font-size: 10px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: var(--text-title);
+      letter-spacing: -0.025em;
+      line-height: 1.25;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .hero p:not(.eyebrow) {
+      max-width: 82ch;
+      color: var(--muted);
+      font-size: var(--text-body);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    /* 现代微立体浮动 Spec 徽章卡片 (无 1px 边框) */
+    .experiment-spec {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow);
+      color: var(--muted);
+      font-size: var(--text-caption);
+      font-family: var(--mono);
+      flex-shrink: 0;
+      display: grid;
+      gap: 6px;
+      padding: 16px 22px;
+    }
+
+    .experiment-spec div {
+      display: flex;
+      gap: 8px;
+    }
+
+    .experiment-spec b {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* 现代产品控制栏 (Toolbar) - 独立卡片造型 */
+    .toolbar {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow);
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 14px 0 20px;
+    }
+
+    .runtime {
+      font-size: var(--text-label);
+      font-family: var(--mono);
+      align-items: center;
+      gap: 8px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .live-dot {
+      background: var(--accent);
+      border-radius: 50%;
+      width: 6px;
+      height: 6px;
+      display: inline-block;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+    }
+
+    .controls {
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      display: flex;
+    }
+
+    /* 按钮组 / 分段控制器底座 */
+    .btn-group {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(10, 12, 18, 0.65);
+      border-radius: 9px;
+      padding: 3px;
+      gap: 3px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    /* 顶部按钮状态：未选中用透明底+灰色文字，选中用亮色填充 */
+    button {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      min-height: 28px;
+      border: none;
+      border-radius: var(--radius-btn);
+      padding: 4px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      background: transparent;
+      color: var(--muted);
+      transition: all 140ms ease;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+    }
+
+    button.active {
+      background: #4ade80;
+      color: #0c1410;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(74, 222, 128, 0.32);
+    }
+
+    button.active:hover {
+      background: #5eead4;
+      color: #0c1410;
+      box-shadow: 0 2px 12px rgba(94, 234, 212, 0.4);
+    }
+
+    select {
+      font-family: var(--mono);
+      font-size: 11px;
+      outline: none;
+      min-height: 28px;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      background: rgba(15, 17, 26, 0.85);
+      color: var(--ink);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+    }
+
+    /* ================= 核心四联工作台 (.workbench) ================= */
+    /* 01 卡片大幅做大：占据左侧全高 (~700px) 无损完整展示 460x580 经典东方竖版战场 */
+    .workbench {
+      display: grid;
+      background: transparent;
+      border: none;
+      gap: 18px;
+      grid-template-columns: 490px 1fr 1fr;
+      grid-template-rows: 350px 330px;
+      grid-template-areas:
+        "environment network network"
+        "environment fly brain";
+    }
+
+    @media (max-width: 1200px) {
+      .workbench {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "environment"
+          "network"
+          "fly"
+          "brain";
+      }
+      .environment-panel {
+        min-height: 690px;
+      }
+      .network-panel {
+        min-height: 380px;
+      }
+      .fly-panel, .brain-panel {
+        min-height: 320px;
+      }
+    }
+
+    /* ================= 喵玉殿同款 恋恋 Fumo 交互挂件 ================= */
+    .fumo-widget {
+      position: fixed;
+      bottom: 16px;
+      right: 22px;
+      z-index: 1000;
+      user-select: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .fumo-bubble {
+      background: rgba(24, 27, 38, 0.95);
+      border: 1px solid rgba(74, 222, 128, 0.4);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+      color: #e2e8f0;
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .fumo-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px 5px 0;
+      border-style: solid;
+      border-color: rgba(24, 27, 38, 0.95) transparent;
+      display: block;
+      width: 0;
+    }
+
+    .fumo-bubble.show,
+    .fumo-widget:hover .fumo-bubble {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fumo-img {
+      width: 125px;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.65));
+      animation: fumoWobble 1.25s ease-in-out infinite;
+      transform-origin: bottom center;
+      transition: transform 0.12s ease;
+    }
+
+    /* 悬停高频 buzz 动效 (喵玉殿原汁原味) */
+    .fumo-widget:hover .fumo-img {
+      animation: fumoBuzz 1.5s linear infinite;
+    }
+
+    /* 点击按压弹性反馈 */
+    .fumo-widget:active .fumo-img {
+      transform: scale(0.92, 0.88);
+    }
+
+    /* 喵玉殿原帖弹性 wobble 关键帧 (duang~ 弹性十足) */
+    @keyframes fumoWobble {
+      50% { transform: translateY(12px) scale(1.03, 0.95); }
+      60% { transform: translateY(-6px); }
+      70% { transform: translateY(4px); }
+      80% { transform: translateY(-2px); }
+      90% { transform: translateY(1px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* 喵玉殿原帖高频 buzz 关键帧 */
+    @keyframes fumoBuzz {
+      10% { transform: translateX(3px) rotate(2deg); }
+      20% { transform: translateX(-3px) rotate(-2deg); }
+      30% { transform: translateX(3px) rotate(2deg); }
+      40% { transform: translateX(-3px) rotate(-2deg); }
+      50% { transform: translateX(2px) rotate(1deg); }
+      60% { transform: translateX(-2px) rotate(-1deg); }
+      70% { transform: translateX(2px) rotate(1deg); }
+      80% { transform: translateX(-2px) rotate(-1deg); }
+      90% { transform: translateX(1px) rotate(0); }
+      100% { transform: translateX(-1px) rotate(0); }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow);
+      border: none;
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .environment-panel { grid-area: environment; }
+    .network-panel { grid-area: network; }
+    .fly-panel { grid-area: fly; }
+    .brain-panel { grid-area: brain; }
+
+    .panel h2 {
+      z-index: 4;
+      height: var(--panel-head);
+      background: rgba(24, 27, 38, 0.95);
+      backdrop-filter: blur(8px);
+      border: none;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: var(--text-caption);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 0 18px;
+      display: flex;
+      position: absolute;
+      inset: 0 0 auto;
+      text-transform: uppercase;
+      border-top-left-radius: var(--radius-card);
+      border-top-right-radius: var(--radius-card);
+    }
+
+    .panel h2 small {
+      color: var(--muted);
+      letter-spacing: 0;
+      font-size: 10px;
+      font-weight: 400;
+    }
+
+    .panel-content {
+      position: absolute;
+      inset: var(--panel-head) 0 var(--panel-foot);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .panel-bottom {
+      z-index: 4;
+      height: var(--panel-foot);
+      background: rgba(24, 27, 38, 0.95);
+      border: none;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--muted);
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 0 18px;
+      font-size: 10.5px;
+      font-family: var(--mono);
+      display: flex;
+      position: absolute;
+      inset: auto 0 0;
+      border-bottom-left-radius: var(--radius-card);
+      border-bottom-right-radius: var(--radius-card);
+    }
+
+    .panel-bottom select {
+      min-height: 24px;
+      padding: 2px 8px;
+      font-size: 10px;
+      background: rgba(15, 17, 26, 0.7);
+    }
+
+    /* 8 通道感觉场面板专用布局 */
+    .sensory-grid {
+      width: 100%;
+      height: 100%;
+      padding: 14px 22px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 24px;
+      align-content: center;
+    }
+
+    .sensory-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sensory-cell-head {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .sensory-cell-head .val {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .sensory-track {
+      width: 100%;
+      height: 5px;
+      background: var(--card-bg-subtle);
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    .sensory-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      border-radius: 3px;
+      transition: width 120ms ease;
+    }
+
+    /* ================= 遥测数据监控带 (.metrics) ================= */
+    /* 7 列独立微立体卡片 */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 14px;
+      border: none;
+      background: transparent;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .metrics {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .metrics > div {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow-sm);
+      border: none;
+      padding: 14px 18px;
+    }
+
+    .metrics span {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .metrics strong {
+      color: var(--accent);
+      margin-top: 3px;
+      font-size: 20px;
+      font-weight: 600;
+      font-family: var(--mono);
+      line-height: 1.4;
+      display: block;
+      letter-spacing: -0.02em;
+    }
+
+    /* ================= 训练与演化基准面板 (.training-bench) ================= */
+    .training-bench {
+      padding: var(--space-panel-padding);
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow);
+      border: none;
+      color: var(--muted);
+      margin-top: var(--space-section-gap);
+    }
+
+    .bench-heading {
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      display: flex;
+    }
+
+    .training-bench h2 {
+      font-size: var(--text-section);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .bench-heading > span {
+      max-width: 44ch;
+      font-size: var(--text-caption);
+      color: var(--accent);
+      text-align: right;
+      font-family: var(--mono);
+      line-height: 1.6;
+    }
+
+    .training-bench p {
+      font-size: var(--text-body);
+      margin-top: 6px;
+      line-height: 1.6;
+      max-width: 100ch;
+    }
+
+    .bench-controls {
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 12px;
+      margin: 18px 0 12px;
+      display: flex;
+    }
+
+    .training-readout {
+      border: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 18px 0;
+      padding-top: 0;
+      display: grid;
+    }
+
+    .training-readout div {
+      background: rgba(15, 17, 26, 0.6);
+      border-radius: 8px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      padding: 14px 16px;
+      border: none;
+    }
+
+    .training-readout strong {
+      color: var(--accent);
+      font-size: 20px;
+      font-weight: 600;
+      font-family: var(--mono);
+      display: block;
+      line-height: 1.3;
+    }
+
+    .training-readout span {
+      font-size: 10.5px;
+      font-family: var(--mono);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: block;
+    }
+
+    .training-chart {
+      background: var(--surface-2);
+      border-radius: 8px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+      border: none;
+      width: 100%;
+      height: 160px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    /* 基准表格 */
+    .benchmark-table {
+      overflow-x: auto;
+      margin-top: 24px;
+      background: rgba(15, 17, 26, 0.5);
+      border-radius: 8px;
+      padding: 8px 14px;
+      border: none;
+    }
+
+    .benchmark-table table {
+      border-collapse: collapse;
+      text-align: left;
+      width: 100%;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .benchmark-table th, .benchmark-table td {
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+      padding: 10px 14px;
+      font-weight: 400;
+    }
+
+    .benchmark-table thead {
+      color: var(--ink);
+      font-size: 10px;
+      background: transparent;
+      text-transform: uppercase;
+    }
+
+    .benchmark-table tbody tr:first-child {
+      color: var(--accent);
+    }
+
+    /* ================= 科学方法与日志区 (.methods) ================= */
+    .methods {
+      padding: var(--space-section-gap) 0;
+    }
+
+    .methods h2 {
+      font-size: var(--text-section);
+      font-family: var(--mono);
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .method-steps {
+      counter-reset: method;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 20px 0 28px;
+      padding: 0;
+      list-style: none;
+      display: grid;
+    }
+
+    @media (max-width: 900px) {
+      .method-steps {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .method-steps li {
+      counter-increment: method;
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow-sm);
+      border: none;
+      padding: 18px 20px;
+    }
+
+    .method-steps li > span {
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      font-size: 10px;
+      font-family: var(--mono);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .method-steps li > span:before {
+      content: "0" counter(method) " / ";
+      color: var(--accent);
+    }
+
+    .method-steps h3 {
+      color: var(--ink);
+      font-size: 12.5px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .method-steps p {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* 实时日志卡片 */
+    .log-container {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--card-shadow);
+      border: none;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+
+    .log-header {
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.02);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .log-list {
+      list-style: none;
+      height: 140px;
+      overflow-y: auto;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      line-height: 1.5;
+      padding: 8px 18px;
+    }
+
+    .log-list li {
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+    }
+
+    .log-time {
+      color: var(--accent);
+      margin-right: 8px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      font-size: 10.5px;
+      font-family: var(--mono);
+      color: var(--muted);
+      padding: 24px 0 36px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #232a3b; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部导航条 (Masthead) -->
+  <header class="masthead">
+    <div class="header-inner">
+      <a class="brand" href="#"><span>FLY</span>TOUHOU</a>
+      <nav>
+        <a href="#workbench" data-i18n="nav.workbench">Live Workbench</a>
+        <a href="#training" data-i18n="nav.training">Training Bench</a>
+        <a href="#benchmark" data-i18n="nav.benchmark">Benchmark</a>
+        <a href="#methods" data-i18n="nav.methods">Methods</a>
+        <div class="btn-group" style="margin-left: 8px;">
+          <button id="btnLangZh" class="active" style="padding: 2px 9px; font-size: 11px; min-height: 24px;">中文</button>
+          <button id="btnLangEn" style="padding: 2px 9px; font-size: 11px; min-height: 24px;">EN</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero 实验项目简述 -->
+    <section class="hero" id="workbench">
+      <div>
+        <div class="eyebrow" data-i18n="hero.eyebrow">MEASURED CONNECTOME EXPERIMENT · HHMI JANELIA MALECNS</div>
+        <h1 data-i18n="hero.title">Fly Touhou · A connectome evasion experiment</h1>
+        <p data-i18n="hero.desc">
+          Can a measured male fruit fly (<em>Drosophila melanogaster</em>) connectome circuit dodge bullet hell in real time?
+          Driven by an 80-neuron subcircuit, 8 biological visual receptive fields (LC/LPLC), and an evolved motor readout.
+        </p>
+      </div>
+      <div class="experiment-spec">
+        <div><span data-i18n="hero.spec_circuit_label">CIRCUIT:</span> <b data-i18n="hero.spec_circuit_val">MaleCNS v1.0 (80 cells / 1,296 synapses)</b></div>
+        <div><span data-i18n="hero.spec_readout_label">READOUT:</span> <b data-i18n="hero.spec_readout_val">320 Parameters (CEM Evolved)</b></div>
+        <div><span data-i18n="hero.spec_frequency_label">FREQUENCY:</span> <b data-i18n="hero.spec_frequency_val">60Hz Physics Synchronous</b></div>
+        <div><span data-i18n="hero.spec_benchmark_label">BENCHMARK:</span> <b data-i18n="hero.spec_benchmark_val">22.56s (Trained) vs 4.25s (Silenced)</b></div>
+      </div>
+    </section>
+
+    <!-- 运行控制工具栏 (Toolbar) -->
+    <div class="toolbar">
+      <div class="runtime">
+        <i class="live-dot"></i>
+        <span id="badgeConnectomeStatus" data-i18n="toolbar.status_active">MaleCNS 60Hz Active</span>
+        <span style="color: var(--muted); margin-left: 10px;" data-i18n="toolbar.warp">WARP:</span>
+        <div class="btn-group">
+          <button id="btnSpeed1x" class="active">1x</button>
+          <button id="btnSpeed5x">5x</button>
+          <button id="btnSpeed20x">20x</button>
+        </div>
+        <span style="color: var(--muted); margin-left: 10px;" data-i18n="toolbar.plasticity">可塑性:</span>
+        <div class="btn-group" title="P4-1 Hebbian 突触可塑性 // W 是否每帧自更新 (生物局部规则，非优化器)">
+          <button id="btnPlasticityOff" class="active">OFF</button>
+          <button id="btnPlasticityLow">η=1e-5</button>
+          <button id="btnPlasticityMid">η=1e-4</button>
+        </div>
+        <span id="labelPlasticityDrift" style="color: #a78bfa; display: none;"></span>
+      </div>
+
+      <div class="controls">
+        <div class="btn-group">
+          <button id="btnShowRadar" class="active">Radar</button>
+          <button id="btnAutoRespawn" class="active">Respawn</button>
+          <button id="btnRestart" data-i18n="toolbar.reset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 核心四联工作台 (.workbench) ================= -->
+    <div class="workbench">
+      <!-- 01 / 环境面板 (Top-Left: Touhou Danmaku Arena，高纵深主战视窗) -->
+      <section class="panel environment-panel">
+        <h2>
+          <span data-i18n="panel.env_title">ENVIRONMENT // TOUHOU STG ARENA</span>
+          <small data-i18n="panel.env_sub">HITBOX: 3.5PX | GRAZE: 28PX</small>
+        </h2>
+        <div class="panel-content">
+          <canvas id="gameCanvas" width="460" height="580" style="border-radius: 8px; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"></canvas>
+        </div>
+        <div class="panel-bottom" id="rowSurvivalSelect">
+          <span><span data-i18n="panel.spellcard_label">SPELLCARD: </span>
+            <select id="selectSpellcard">
+              <option value="0" data-i18n="panel.spellcard_1" selected>❄ 雹符「Hailstorm」· th06 原作移植</option>
+              <option value="4" data-i18n="panel.spellcard_5">🦇 冥符「紅色の冥界」· Stage 6 Boss 蕾米莉亚</option>
+              <option value="1" data-i18n="panel.spellcard_2">「博丽逃逸·环状漫天符」</option>
+              <option value="2" data-i18n="panel.spellcard_3">「梦想封印·高密自机狙」</option>
+              <option value="3" data-i18n="panel.spellcard_4">「八方狂岚·交错螺旋弹幕」</option>
+            </select>
+          </span>
+          <span id="cardDynamicDiff"><span data-i18n="panel.diff_label">DIFFICULTY: </span>
+            <span id="diffEmoji">🌱</span> 
+            <span id="diffLabel" style="color: var(--accent);">超级简单</span> 
+            <span style="display:inline-block; width:48px; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; vertical-align:middle; margin:0 4px; overflow:hidden;"><i id="diffProgressBar" style="display:block; width:35%; height:100%; background:var(--accent); transition: width 0.15s ease;"></i></span>
+            (<span id="diffPercent" style="color: var(--accent);">35%</span> · <span data-i18n="panel.diff_cap">45s 封顶</span>)
+          </span>
+        </div>
+      </section>
+
+      <!-- 02 / 全脑网络面板 (Top-Right: MaleCNS Connectome Graph，适度收敛留出更多周边空白) -->
+      <section class="panel network-panel">
+        <h2>
+          <span data-i18n="panel.net_title">CONNECTOME // MALECNS V1.0 GRAPH</span>
+          <small id="netSub">80 NODES / 1,296 SYNAPSES</small>
+          <select id="brainDataset" style="margin-left: auto; background: #131620; color: #9ca3af; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font: 10px 'JetBrains Mono', monospace; padding: 2px 6px;" title="MaleCNS 拓扑数据集 (规模对照组)">
+            <option value="v1">80 CELLS · v1</option>
+            <option value="v600">600 CELLS · v2 closure</option>
+            <option value="v600a">600a · additive-norm fix</option>
+            <option value="v600b">600b · v1-readout restore</option>
+          </select>
+        </h2>
+        <div class="panel-content">
+          <canvas id="brainCanvas" width="560" height="268" style="border-radius: 8px; width: 100%; height: 100%; display: block;"></canvas>
+        </div>
+        <div class="panel-bottom">
+          <span id="labelAblationStatus" style="color: var(--accent);" data-i18n="panel.net_active">● CONNECTOME ACTIVE</span>
+          <span data-i18n="panel.net_reservoir">RESERVOIR // 3 SUBSTEPS PER FRAME</span>
+        </div>
+      </section>
+
+      <!-- 03 / 苍蝇肉身踏击键盘装置 (Bottom-Left: 03 Keyboard Rig) -->
+      <section class="panel fly-panel">
+        <h2>
+          <span data-i18n="panel.rig_title">03 // MOTOR KEYBOARD RIG</span>
+          <small data-i18n="panel.rig_sub">果蝇实时按键输出 · 60Hz 具身动作</small>
+        </h2>
+        <div class="panel-content">
+          <canvas id="keyboardRigCanvas" width="600" height="240" style="border-radius: 8px;"></canvas>
+        </div>
+        <div class="panel-bottom">
+          <span data-i18n="panel.rig_input">INPUT // 16 DNs READOUT</span>
+          <span data-i18n="panel.rig_latency">LATENCY // 0-FRAME SYNC</span>
+        </div>
+      </section>
+
+      <!-- 04 / 生物视觉感受野面板 (Bottom-Right: Sensory Field) -->
+      <section class="panel brain-panel">
+        <h2>
+          <span data-i18n="panel.sensory_title">04 // 生物视觉与本体感受野</span>
+          <small data-i18n="panel.sensory_sub">8 通道威胁、光流与自机位置感知</small>
+        </h2>
+        <div class="panel-content">
+          <div class="sensory-grid" id="sensoryBarsContainer">
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lc4">LC4 (Looming 逼近威胁)</span><span class="val" id="obsVal_0">0%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_0"></div></div>
+            </div>
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lc11">LC11 (左侧小目标威胁)</span><span class="val" id="obsVal_1">0%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_1"></div></div>
+            </div>
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lc9">LC9 (右侧小目标威胁)</span><span class="val" id="obsVal_2">0%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_2"></div></div>
+            </div>
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lc15">LC15 (后方逼近威胁)</span><span class="val" id="obsVal_3">0%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_3"></div></div>
+            </div>
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lc16">LC16 (水平全局光流)</span><span class="val" id="obsVal_4">50%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_4" style="width: 50%;"></div></div>
+            </div>
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lc17">LC17 (垂直下落光流)</span><span class="val" id="obsVal_5">0%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_5"></div></div>
+            </div>
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lc21">LC21 (水平本体位置 · X)</span><span class="val" id="obsVal_6">50%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_6" style="width: 50%;"></div></div>
+            </div>
+            <div class="sensory-cell">
+              <div class="sensory-cell-head"><span data-i18n="panel.lplc2">LPLC2 (垂直本体位置 · Y)</span><span class="val" id="obsVal_7">80%</span></div>
+              <div class="sensory-track"><div class="sensory-fill" id="obsFill_7" style="width: 80%;"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-bottom">
+          <span>NORMALIZED FIELD [0.0, 1.0]</span>
+          <span>OPTIC LOBE (LC/LPLC)</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- 紧贴工作台下方的 7 栏遥测数据带 (.metrics) -->
+    <div class="metrics">
+      <div>
+        <span data-i18n="metrics.survival">SURVIVAL TIME</span>
+        <strong id="statSurvive">0.0s</strong>
+      </div>
+      <div>
+        <span data-i18n="metrics.max_survival">MAX SURVIVAL</span>
+        <strong id="statMaxSurvive" style="color: var(--ink);">0.0s</strong>
+      </div>
+      <div>
+        <span data-i18n="metrics.graze">GRAZE COUNT</span>
+        <strong id="statGraze" style="color: var(--ink);">0</strong>
+      </div>
+      <div>
+        <span data-i18n="metrics.hits">TOTAL HITS</span>
+        <strong id="statHits" style="color: #94a3b4;">0</strong>
+      </div>
+      <div>
+        <span data-i18n="metrics.round">KILL ROUNDS</span>
+        <strong id="statRound" style="color: var(--ink);">第 1 轮</strong>
+      </div>
+      <div>
+        <span data-i18n="metrics.spikes">SPIKE RATE</span>
+        <strong id="statSpikes">0 / 80</strong>
+      </div>
+      <div>
+        <span data-i18n="metrics.gf_evasions">GF EVASIONS</span>
+        <strong id="statGFHits" style="color: var(--ink);">0</strong>
+      </div>
+    </div>
+
+    <!-- ================= 神经演化训练实验台 (.training-bench) ================= -->
+    <section class="training-bench" id="training">
+      <div class="bench-heading">
+        <div>
+          <h2 data-i18n="train.title">Training Bench · CEM Neuroevolution</h2>
+          <p data-i18n="train.desc">
+            The biological MaleCNS connectome is fixed; only the 320 linear readout parameters connecting descending neurons (DNs) to motor outputs are evolved.
+            Run evolutionary iterations in the browser or reload the pre-trained champion policy.
+          </p>
+        </div>
+        <span data-i18n="train.badge">CROSS-ENTROPY METHOD<br>320 EVOLVABLE WEIGHTS</span>
+      </div>
+
+      <div class="bench-controls">
+        <div class="btn-group">
+          <button id="btnTrainStep" class="active" data-i18n="train.step">⚡ Step 1 Generation</button>
+          <button id="btnLoadMaster" data-i18n="train.restore">👑 Restore Champion Policy</button>
+          <button id="btnResetRandom" data-i18n="train.reset">🎲 Reset to Random</button>
+        </div>
+      </div>
+
+      <!-- 4 栏大指标 -->
+      <div class="training-readout">
+        <div>
+          <span data-i18n="train.gen">GENERATION</span>
+          <strong id="statGen">Gen #1</strong>
+        </div>
+        <div>
+          <span data-i18n="train.best">BEST SURVIVAL</span>
+          <strong id="statBestSurvive">0.0s</strong>
+        </div>
+        <div>
+          <span data-i18n="train.avg_graze">AVERAGE GRAZE</span>
+          <strong id="statAvgGraze">0</strong>
+        </div>
+        <div>
+          <span data-i18n="train.optimizer">OPTIMIZER</span>
+          <strong style="color: var(--ink);" data-i18n="train.optimizer_val">CEM (Covariance Adaptation)</strong>
+        </div>
+      </div>
+
+      <!-- 学习曲线画布 -->
+      <div class="training-chart">
+        <canvas id="curveCanvas" width="900" height="150"></canvas>
+      </div>
+
+      <!-- 严谨消融对照基准表 -->
+      <div class="benchmark-table" id="benchmark">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="train.tbl_baseline">Evaluation Baseline (50 Ep. Average)</th>
+              <th data-i18n="train.tbl_survival">Survival Time (s)</th>
+              <th data-i18n="train.tbl_frames">Frames Survived</th>
+              <th data-i18n="train.tbl_significance">Causal Significance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong data-i18n="train.row_trained_label">🧠 Trained MaleCNS Connectome (Champion)</strong></td>
+              <td id="tblTrainedSec">21.72s</td>
+              <td id="tblTrainedFrames">1303 frames</td>
+              <td data-i18n="train.row_trained_desc">Full biological sensory-motor evasion active</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n="train.row_control_label">🔀 Matched Control (Degree-Preserving)</strong></td>
+              <td id="tblControlSec">--</td>
+              <td id="tblControlFrames">--</td>
+              <td data-i18n="train.row_control_desc">Identical degrees & synapses, biological topology randomized (Maslov-Sneppen)</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n="train.row_silenced_label">🔇 Circuit Silenced Control (Ablated)</strong></td>
+              <td id="tblSilencedSec">4.25s</td>
+              <td id="tblSilencedFrames">255 frames</td>
+              <td data-i18n="train.row_silenced_desc">p &lt; 0.001 (Loss of perception results in fatal collision)</td>
+            </tr>
+            <tr>
+              <td><strong data-i18n="train.row_static_label">🛑 Static Inertia Baseline</strong></td>
+              <td id="tblStaticSec">4.25s</td>
+              <td id="tblStaticFrames">255 frames</td>
+              <td data-i18n="train.row_static_desc">Stationary center baseline</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= 科学方法与电生理事件流 (#methods) ================= -->
+    <section class="methods" id="methods">
+      <h2 data-i18n="methods.title">Methods & Causal Framework</h2>
+      <ul class="method-steps">
+        <li>
+          <span data-i18n="methods.s1_tag">Perception</span>
+          <h3 data-i18n="methods.s1_title">8-Channel Receptive Field</h3>
+          <p data-i18n="methods.s1_desc">LC4, LC11, LC9, and LPLC2 lobula projection neurons continuously extract looming threats and optical flow vectors.</p>
+        </li>
+        <li>
+          <span data-i18n="methods.s2_tag">Dynamics</span>
+          <h3 data-i18n="methods.s2_title">MaleCNS Reservoir</h3>
+          <p data-i18n="methods.s2_desc">80 neurons and 1,296 synapses solved via non-linear leaky tanh recurrent dynamics over 3 sub-steps per frame.</p>
+        </li>
+        <li>
+          <span data-i18n="methods.s3_tag">Actuation</span>
+          <h3 data-i18n="methods.s3_title">03 / Keyboard Rig</h3>
+          <p data-i18n="methods.s3_desc">16 descending neuron (DN) outputs decoded into real-time physical keypresses, manifested in the mechanical stepping rig.</p>
+        </li>
+        <li>
+          <span data-i18n="methods.s4_tag">Optimization</span>
+          <h3 data-i18n="methods.s4_title">CEM Neuroevolution</h3>
+          <p data-i18n="methods.s4_desc">Derivative-free cross-entropy evolution discovers robust zero-bias linear readout parameters without hand-tuned artificial fields.</p>
+        </li>
+      </ul>
+
+      <!-- 实时电生理事件流日志 -->
+      <div class="log-container">
+        <div class="log-header" data-i18n="methods.log_title">TELEMETRY STREAM // REAL-TIME ELECTROPHYSIOLOGICAL EVENTS</div>
+        <ul class="log-list" id="eventLogList">
+          <!-- 动态事件日志 -->
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="header-inner" style="padding: 0;">
+      <span data-i18n="footer.credit">Fly Touhou · Inspired by FlyDino (cobanov.dev) & HHMI Janelia MaleCNS Connectome</span>
+      <span data-i18n="footer.sync">60Hz Browser Autonomous Simulation</span>
+    </div>
+  </footer>
+
+  <!-- ================= 喵玉殿同款 恋恋 Fumo 交互挂件 ================= -->
+  <div class="fumo-widget" id="fumoWidget" title="点击恋恋互动~">
+    <div class="fumo-bubble" id="fumoBubble">Fumo Fumo~ (晃来晃去)</div>
+    <img class="fumo-img" id="fumoImg" src="/public/images/fumo_koishi.png" alt="Koishi Fumo" />
+  </div>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

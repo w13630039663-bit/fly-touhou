@@ -1,0 +1,30 @@
+# ── 本地专属：可再生的原始下载与第三方参考，不公开 ──────────
+#   溯源证据（graph sha256 / manifest / _research/malecns/build_graph_600.py）
+#   已在仓库内；543MB 的 .feather 原始文件可从 male-cns.janelia.org 重新下载。
+_archive/
+
+# ── 工作日志与逐帧图片批：本地审计用，不公开 ────────────────
+#   experiments/ 的其余内容（实验脚本、checkpoint、结题报告）**是公开的**，
+#   因为 README 里"可复现"的声明需要对应文件支撑。
+experiments/journal/
+experiments/gif_analysis/
+experiments/gif_full/
+
+# ── 运行期 / 依赖 ─────────────────────────────────────────
+node_modules/
+*.log
+npm-debug.log*
+
+# ── 编辑器 / 操作系统 ─────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*~
+
+# ── Python 残留 ──────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo

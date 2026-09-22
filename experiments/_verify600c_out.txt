@@ -1,0 +1,37 @@
+v1 边 1296 (contacts 合计 26029)
+v2 诱导边 846 (contacts 合计 25423)
+
+[方向假设检验]
+  仅 v1 有的 450 条中，反向边存在于 v2 的: 146  → 方向约定不同 ? false
+  仅 v2 有的 0 条中，反向边存在于 v1 的: 0  → 方向约定不同 ? true
+
+[仅 v1 有的边 — 按 contacts 排序 Top 12]
+   10010->10147  contacts=2  [DNp01/acetylcholine -> LHAD1g1]  反向在 v2? YES c=188
+   10010->10283  contacts=2  [DNp01/acetylcholine -> DNp103]  反向在 v2? YES c=12
+   10010->10361  contacts=2  [DNp01/acetylcholine -> DNg40]  反向在 v2? YES c=14
+   10010->11252  contacts=2  [DNp01/acetylcholine -> PVLP017]  反向在 v2? YES c=48
+   10030->10783  contacts=2  [pIP1/acetylcholine -> DNp09]  反向在 v2? no
+   10063->10173  contacts=2  [DNp27/acetylcholine -> PVLP151]  反向在 v2? no
+   10063->10234  contacts=2  [DNp27/acetylcholine -> DNp35]  反向在 v2? no
+   10063->10361  contacts=2  [DNp27/acetylcholine -> DNg40]  反向在 v2? no
+   10063->10590  contacts=2  [DNp27/acetylcholine -> DNpe052]  反向在 v2? no
+   10063->10936  contacts=2  [DNp27/acetylcholine -> LT61b]  反向在 v2? no
+   10063->11677  contacts=2  [DNp27/acetylcholine -> PVLP151]  反向在 v2? no
+   10063->11826  contacts=2  [DNp27/acetylcholine -> PVLP151]  反向在 v2? no
+
+[仅 v2 有的边 — 按 contacts 排序 Top 12]
+
+[contacts 分布对比]
+  仅 v1 有: {"1-2":450,"3-9":0,"10-49":0,"50-199":0,"200+":0}
+  仅 v2 有: {"1-2":0,"3-9":0,"10-49":0,"50-199":0,"200+":0}
+  v1 全体: {"1-2":450,"3-9":377,"10-49":341,"50-199":108,"200+":20}
+  v2 全体: {"1-2":0,"3-9":377,"10-49":341,"50-199":108,"200+":20}
+
+[阈值假设检验] v2 声称 "induced directed edges >=3 contacts"
+  v1 中 contacts<3 的边: 450 条 → 若 v2 用 >=3 阈值，这部分(≤450)应被剔除
+  仅 v1 有且 contacts>=3 的边: 0 条 → 这部分【无法】用阈值解释
+  → 结论: 差异可完全由 >=3 阈值 + 方向约定解释
+
+[两图 sources 哈希]
+  v1 sources: {"annotations":"2177e246113e4cfbf1e7772ec37c6da1955ff22e8063d0b1f833101f99a9a3b2","edges":"e35da783d1c686b2b58b3b87cd6a403ae43bfcfba8bff28e08ef752c1a56afc1","neurotransmitters":"95c9289220663abeb3409f3ad9e5a7f8a53f8093f5139d15502cd08da8879621"}
+  v2 sources: {"annotations":"2177e246113e4cfbf1e7772ec37c6da1955ff22e8063d0b1f833101f99a9a3b2","edgesTracedOnly":"9b3beab17bad5f618be3f2c02d3139a8d07b822565919c013f1e5506d93e604b","neurotransmitters":"95c9289220663abeb3409f3ad9e5a7f8a53f8093f5139d15502cd08da8879621"}

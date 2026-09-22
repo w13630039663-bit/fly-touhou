@@ -1,0 +1,57 @@
+{
+  "dataset": "FlyEM MaleCNS v1.0, min confidence 0.5, traced-only segment pairs",
+  "license": "CC BY 4.0",
+  "source": "https://male-cns.janelia.org/download/",
+  "nodes": 600,
+  "edges": 37845,
+  "synapticContacts": 1129414,
+  "inputCells": 56,
+  "readoutCells": 16,
+  "roster": {
+    "note": "P0.1 名册：graph600 = v1 全部 80 细胞 (body-ID 80/80 在内) + 520 新细胞。新细胞按 role 分层供选择性消融使用；主消融口径只静音 496 中间神经元，保留 24 个新感觉输入细胞 (否则将移除 56 输入中的 24 个 = 43% 感觉门)。",
+    "v1CellsPresent": 80,
+    "newCells": 520,
+    "newRoles": { "input": 24, "interneuron": 496, "output": 0 },
+    "newInputByChannel": { "0": 4, "5": 20 },
+    "ablationMainSet": "newInterneurons496",
+    "ablationReferenceSet": "newCells520"
+  },
+  "graphSha256": "d3b38436865b1bd7e4125b7b612e22fae55f94cff457003c94abd804f14a1144",
+  "sources": {
+    "annotations": "2177e246113e4cfbf1e7772ec37c6da1955ff22e8063d0b1f833101f99a9a3b2",
+    "edgesTracedOnly": "9b3beab17bad5f618be3f2c02d3139a8d07b822565919c013f1e5506d93e604b",
+    "neurotransmitters": "95c9289220663abeb3409f3ad9e5a7f8a53f8093f5139d15502cd08da8879621"
+  },
+  "selection": "Weighted pathway closure grown deterministically from the 80 cells of graph.json v1: three rounds taking the top (120, 120, 240) candidates by total synaptic contacts (>=3 per edge, either direction) to the current set, ties by lower body ID; candidates restricted to status=Traced, annotated type, soma location present; filled to exactly 600. Readout cells unchanged (the original 16 DNs). Input cells: every set member whose annotated type is one of the 8 channel types. All induced directed edges >=3 contacts retained. No game outcomes used. Derived node metadata reproduced the shipped 80-cell v1 graph byte-for-byte from the same sources before growing.",
+  "assumptions": "Engineered 8-channel input injection; simplified signed, normalized, leaky tanh rate units. Acetylcholine +1, GABA/glutamate -1; unknown and modulatory transmitters 0. Neurotransmitter call = consensus_nt when predicted_nt_confidence >= 0.5 else unclear. Not a physiological or whole-brain model.",
+  "stats": {
+    "roleCounts": {
+      "input": 56,
+      "interneuron": 528,
+      "output": 16
+    },
+    "signCounts": {
+      "1": 410,
+      "0": 21,
+      "-1": 169
+    },
+    "ntCounts": {
+      "acetylcholine": 410,
+      "gaba": 125,
+      "glutamate": 44,
+      "unclear": 11,
+      "dopamine": 6,
+      "octopamine": 4
+    },
+    "superclassCounts": {
+      "cb_intrinsic": 453,
+      "visual_projection": 83,
+      "descending_neuron": 44,
+      "ascending_neuron": 13,
+      "visual_centrifugal": 7
+    },
+    "typeCount": 321,
+    "dnSupernumerary": 44,
+    "vncMotor": 0
+  }
+}

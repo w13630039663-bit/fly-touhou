@@ -1,0 +1,83 @@
+{
+  "note": "PLAN_520 P0.2 — public/data/checkpoint600b.json trained weights, test seeds 80001-80020, 与 train.js 评估栈同构 (1800f cap)",
+  "weightsFrom": "public/data/checkpoint600b.json",
+  "graph": "public/data/connectome/graph600b.json",
+  "graphSha": "9b442c5059c0a3911a2e93cb220c43caa22fabf912806f40588436bde1aed8fd",
+  "normal": {
+    "frames": 1374.9,
+    "perSeedFrames": [
+      684,
+      1800,
+      1009,
+      696,
+      1800,
+      1335,
+      714,
+      1800,
+      1020,
+      1800,
+      1800,
+      1800,
+      840,
+      1800,
+      1677,
+      753,
+      1800,
+      1800,
+      770,
+      1800
+    ]
+  },
+  "silenced496": {
+    "frames": 1365.5,
+    "perSeedFrames": [
+      685,
+      1800,
+      1015,
+      695,
+      1800,
+      1800,
+      714,
+      1800,
+      1017,
+      1800,
+      1800,
+      1800,
+      841,
+      1800,
+      1020,
+      753,
+      1800,
+      1800,
+      770,
+      1800
+    ]
+  },
+  "silenced520": {
+    "frames": 1476.4,
+    "perSeedFrames": [
+      682,
+      1800,
+      1800,
+      690,
+      1800,
+      1679,
+      714,
+      1800,
+      1800,
+      1800,
+      1800,
+      1800,
+      840,
+      1800,
+      1800,
+      753,
+      1800,
+      1800,
+      770,
+      1800
+    ]
+  },
+  "delta0_496": 9.400000000000091,
+  "delta0_520": -101.5
+}
